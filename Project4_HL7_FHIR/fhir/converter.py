@@ -23,8 +23,51 @@ def map_gender(gender):
     return "unknown"
 
 
+def hl7_to_fhir_encounter(parsed_hl7: dict):
+    pv1 = parsed_hl7.get("PV1", {})
+
+    return {
+        "resourceType": "Encounter",
+        "status": "finished",
+        "class": {
+            "code": map_visit_type(pv1.get("visit_type"))
+        },
+        "location": [
+            {
+                "location": {
+                    "display": pv1.get("location")
+                }
+            }
+        ]
+    }
+
+
+def map_visit_type(vtype):
+    if vtype == "I":
+        return "inpatient"
+    elif vtype == "O":
+        return "outpatient"
+    return "unknown"
+
+
 def format_date(date_str):
     # HL7: YYYYMMDD → FHIR: YYYY-MM-DD
     if not date_str:
         return None
     return f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:]}"
+
+
+def build_fhir_bundle(patient: dict, encounter: dict):
+    return {
+        "resourceType": "Bundle",
+        "type": "collection",
+        "entry": [
+            {
+                "resource": patient
+            },
+            {
+                "resource": encounter
+            }
+        ]
+    }
+

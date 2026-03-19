@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String 
-from database import Base
+from sqlalchemy.dialects.postgresql import JSONB
+from Project3_HL7_Database.db.database import Base
 
 class Patient(Base):
     __tablename__ = "patients"
@@ -25,3 +26,12 @@ class HL7Message(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     raw_message = Column(String)
+
+
+class FHIRResource(Base):
+    __tablename__ = "fhir_resources"
+
+    id = Column(Integer, primary_key=True, index=True)
+    resource_type = Column(String)
+    resource_id = Column(String)
+    data = Column(JSONB)

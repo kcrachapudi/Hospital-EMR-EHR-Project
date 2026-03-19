@@ -29,5 +29,13 @@ def parse_hl7(message: str):
                 "dob": dob,
                 "gender": gender,
             }
+        elif segment_type == "PV1":
+            visit_type = fields[2] if len(fields) > 2 else None
+            location = fields[3] if len(fields) > 3 else None
+
+            parsed["PV1"] = {
+                "visit_type": visit_type,
+                "location": location
+            }    
 
     return parsed

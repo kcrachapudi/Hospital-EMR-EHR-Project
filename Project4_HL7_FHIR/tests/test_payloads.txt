@@ -1,0 +1,59 @@
+#Patient Only Payload
+msg = """MSH|^~\\&|App|Fac|RecApp|RecFac|202403161200||ADT^A01|MSG00001|P|2.3
+PID|1||1001||Smith^John||19850505|M
+"""
+
+
+#Patient and Encounter Payload
+{
+  "message": "MSH|^~\\&|App|Fac|RecApp|RecFac|202403161200||ADT^A01|MSG00001|P|2.3\nPID|1||1001||Smith^John||19850505|M\nPV1|1|I|ER"
+}
+
+# Sample Payloads
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161200||ADT^A01|MSG00001|P|2.3
+PID|1||1005||Reagan^Nancy||19850505|F
+PV1|1|I|ER
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161201||ADT^A01|MSG00002|P|2.3
+PID|1||1006||Doe^Jane||19900210|F
+PV1|1|O|Clinic
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161202||ADT^A01|MSG00003|P|2.3
+PID|1||1007||Brown^Charlie||19781225|M
+PV1|1|I|ICU
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161200||ADT^A01|MSG00001|P|2.3
+PID|1||1008||Bundy^Fred||19850505|M
+PV1|1|I|ER
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161201||ADT^A01|MSG00002|P|2.3
+PID|1||1009||Graham^Margaret||19900210|F
+PV1|1|O|Clinic
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161202||ADT^A01|MSG00003|P|2.3
+PID|1||1010||Gonzalez^Laurie||19690403|F
+PV1|1|I|ICU
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161200||ADT^A01|MSG00001|P|2.3
+PID|1||1015||Paul^Kate||19850505|F
+PV1|1|I|ER
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161201||ADT^A01|MSG00002|P|2.3
+PID|1||1016||Donahue^Ally||19570710|F
+PV1|1|O|Clinic
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161202||ADT^A01|MSG00003|P|2.3
+PID|1||1017||North^Wayne||19681125|M
+PV1|1|I|ICU
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161200||ADT^A01|MSG00001|P|2.3
+PID|1||1018||Zidane^Jim||19890505|M
+PV1|1|I|ER
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161201||ADT^A01|MSG00002|P|2.3
+PID|1||1019||Dunn^Lilly||19800210|F
+PV1|1|O|Clinic
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161202||ADT^A01|MSG00003|P|2.3
+PID|1||1020||Moore^July||19381225|F
+PV1|1|I|ICU
