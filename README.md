@@ -41,6 +41,39 @@ HL7 Message → Parser → Validator → FHIR Converter → Database → API
 - Real-time message streaming
 - Logging system (file + console)
 
+## Example HL7 Input
+MSH|^~\&|App|Fac|RecApp|RecFac|...
+PID|1||1001||Smith^John||19850505|M
+PV1|1|I|ER
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161200||ADT^A01|MSG00001|P|2.3
+PID|1||1005||Reagan^Nancy||19850505|F
+PV1|1|I|ER
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161201||ADT^A01|MSG00002|P|2.3
+PID|1||1006||Doe^Jane||19900210|F
+PV1|1|O|Clinic
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161202||ADT^A01|MSG00003|P|2.3
+PID|1||1007||Brown^Charlie||19781225|M
+PV1|1|I|ICU
+
+MSH|^~\&|App|Fac|RecApp|RecFac|202403161200||ADT^A01|MSG00001|P|2.3
+PID|1||1008||Bundy^Fred||19850505|M
+PV1|1|I|ER
+
+
+## FHIR Output
+{
+  "resourceType": "Patient",
+  "name": [
+    {
+      "family": "Smith",
+      "given": ["John"]
+    }
+  ]
+}
+
 # API Endpoints
 POST /hl7-raw
 GET /patients
@@ -74,6 +107,7 @@ Most projects are CRUD-based, but this one handles real-world data formats like 
 🏁 Where you stand now
 Learning → Building → Debugging → Integrating → Streaming → Logging → Packaging
 
+
 # Job Roles 
 HL7 developer
 FHIR developer
@@ -81,21 +115,3 @@ Healthcare integration engineer
 Interface engine HL7
 Python FastAPI backend engineer
 Healthcare backend engineer
-
-
-## Example HL7 Input
-MSH|^~\&|App|Fac|RecApp|RecFac|...
-PID|1||1001||Smith^John||19850505|M
-PV1|1|I|ER
-
-
-## FHIR Output
-{
-  "resourceType": "Patient",
-  "name": [
-    {
-      "family": "Smith",
-      "given": ["John"]
-    }
-  ]
-}
