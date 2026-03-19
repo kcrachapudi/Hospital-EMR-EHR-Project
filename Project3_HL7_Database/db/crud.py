@@ -2,6 +2,9 @@ import sys
 from pathlib import Path
 from sqlalchemy.orm import Session
 
+import logging
+logger = logging.getLogger(__name__)
+
 # 1. Get the absolute path to the folder containing THIS script
 script_dir = Path(__file__).resolve().parent
 
@@ -9,13 +12,14 @@ script_dir = Path(__file__).resolve().parent
 if str(script_dir) not in sys.path:
     sys.path.insert(0, str(script_dir))
 
-from Project3_HL7_Database.db.models import Patient, Visit, FHIRResource
+from Project3_HL7_Database.db.models import Patient, Visit, FHIRResource, HL7Message
 
 def create_patient(db, data):
     patient = Patient(**data)
     db.add(patient)
     db.commit()
     db.refresh(patient)
+    logger.info(f"Patient created: {patient.patient_id} - {patient.first_name} {patient.last_name}")
     return patient
 
 def create_visit(db, data):
@@ -23,6 +27,7 @@ def create_visit(db, data):
     db.add(visit)
     db.commit()
     db.refresh(visit)
+    logger.info(f"Visit created: {visit.visit_id} for patient_id: {visit.patient_id}")
     return visit
 
 
@@ -45,5 +50,5 @@ def save_fhir_bundle(db: Session, bundle: dict):
         )
         
         db.add(db_resource)
-    
+        logger.info(f"FHIR Resource saved: {db_resource.resource_id}")  
     db.commit()

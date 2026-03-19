@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 def parse_hl7(message:str):
     segments = message.strip().split('\n')
     parsed = {}
@@ -24,3 +27,17 @@ def hl7_to_json(parsed):
             "gender": pid[7]
         }
     return result
+
+
+def validate_hl7(message):
+
+    required_segments = ["MSH","PID"]
+
+    segments = [line.split("|")[0] for line in message.split("\n")]
+
+    for r in required_segments:
+        if r not in segments:
+            logger.warning(f"Required segment missing: {r}")
+            return False
+
+    return True

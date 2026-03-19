@@ -3,6 +3,18 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(name)s | %(levelname)s | %(message)s",
+    handlers=[
+        logging.FileHandler("PureAPI.log"),   # 👈 file
+        logging.StreamHandler()           # 👈 console
+    ]
+)
+logger = logging.getLogger(__name__)
+
 # 1. Move up 3 levels to reach ProjMain
 root_dir = Path(__file__).resolve().parent.parent.parent
 
@@ -10,7 +22,7 @@ root_dir = Path(__file__).resolve().parent.parent.parent
 if str(root_dir) not in sys.path:
     sys.path.insert(0, str(root_dir))
 
-from Project1_HL7_Parser.parser.hl7_updated_parser import parse_hl7
+from Project1_HL7_Parser.parser.hl7_updated_parser import parse_hl7, validate_hl7
 from Project3_HL7_Database.db import crud, database
 from Project3_HL7_Database.db.models import FHIRResource
 
@@ -32,7 +44,13 @@ def home():
 
 @app.post("/hl7-raw")
 async def raw_hl7(message: str = Body(..., media_type="text/plain")):
+    logger.info(f'Raw Message: {repr(message)}')
     parsed = parse_hl7(message)
+
+    try:
+        validate_hl7(parsed)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
     patient = hl7_to_fhir_patient(parsed)
     encounter = hl7_to_fhir_encounter(parsed)
@@ -41,8 +59,8 @@ async def raw_hl7(message: str = Body(..., media_type="text/plain")):
     #Save FHIR Bundle to Database
     mydb = database.SessionLocal()
     crud.save_fhir_bundle(mydb, bundle)
-
-    return bundle
+    logger.info(f"FHIR Bundle saved to database for patient: {patient['id']}")
+    return {"status": "processed"}
 
 
 @app.get("/patients")
@@ -89,7 +107,7 @@ def update_patient(patient_id: str, updated_data: dict):
     
     resource.data = updated_data
     mydb.commit()
-
+    logger.info(f"Patient updated: {patient_id}")
     return {"message": "Patient fully updated"}
 
 
@@ -107,6 +125,7 @@ def patch_patient(patient_id: str, updates: dict):
     
     resource.data.update(updates)
     mydb.commit()
+    logger.info(f"Patient updated: {patient_id}")
     return {"message": "Patient partially updated"}
 
 
@@ -124,4 +143,5 @@ def delete_patient(patient_id: str):
     
     mydb.delete(resource)
     mydb.commit()
+    logger.info(f"Patient deleted: {patient_id}")
     return {"message": "Patient deleted"}
